@@ -5,8 +5,6 @@ from models.lobbies import LobbyModel
 from models.blocchi import BloccoModel
 from models.turns import TurnModel
 
-import time
-
 
 class CreateLobby(Resource):
     def post(self):
@@ -18,14 +16,12 @@ class CreateLobby(Resource):
         user.save_to_db()
         return [lobby.tag, user.id]
 
-
 class CreateUser(Resource):
     def post(self, lobby_tag):
         lobby = LobbyModel.find_by_tag(lobby_tag)
         user = UserModel(lobby_id=lobby.id)
         user.save_to_db()
         return user.id
-
 
 class GetGrid(Resource):
     def get(self, user_id):
@@ -56,7 +52,6 @@ class GetGrid(Resource):
             "users": users_array
         }
         return j_result
-
 
 # ================== partite =================== #
 
