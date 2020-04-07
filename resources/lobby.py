@@ -47,7 +47,7 @@ class GetGrid(Resource):
             if lobby.status == 1 and lobby.find_player_playing().id == u.id:
                 is_playing = True
             j_user = {"id": u.id, "livello": u.livello, "pedina_number": u.pedina_number, "corsia": c,
-                      "is_playing": is_playing }
+                      "is_playing": is_playing, "jolly_reveal": u.jolly_reveal, "jolly_earthquake": u.jolly_earthquake }
             users_array.append(j_user)
         j_griglia = {"corsie": lobby.corsie, "livelli": lobby.livelli, "status": game_status}
         j_result = {
@@ -56,13 +56,6 @@ class GetGrid(Resource):
             "users": users_array
         }
         return j_result
-
-
-class GetLobbyStatus(Resource):
-    def get(self, user_id):
-        user = UserModel.find_by_id(user_id)
-        lobby = LobbyModel.find_by_id(user.id)
-        return lobby.status, 200
 
 
 # ================== partite =================== #

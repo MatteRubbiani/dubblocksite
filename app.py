@@ -3,7 +3,7 @@ from flask import Flask
 from flask_restful import Api
 from flask import render_template
 
-from resources.lobby import CreateLobby, CreateUser, GetGrid, GetLobbyStatus, ResetPartita, GetInPrepartita, \
+from resources.lobby import CreateLobby, CreateUser, GetGrid, ResetPartita, GetInPrepartita, \
     LeavePartita, StartPartita, MoveBlocco, Move, JollyEarthquake, JollyReveal
 # ============ app configs ============= #
 
@@ -16,11 +16,11 @@ api = Api(app)
 
 # ============ not found ============= #
 
-@app.errorhandler(404)
+"""@app.errorhandler(404)
 def page_not_found(e):
     return render_template("not_found.html",
                            message="Oops. Looks something's wrong. Check the spelling and try again"), 404
-
+"""
 # ============ app routes ============= #
 
 
@@ -29,7 +29,6 @@ api.add_resource(CreateLobby, "/create_lobby")
 api.add_resource(CreateUser, "/create_user/<string:lobby_tag>")
 api.add_resource(GetGrid, "/get/<string:user_id>")
 api.add_resource(ResetPartita, "/reset/<string:user_id>")
-api.add_resource(GetLobbyStatus, "/status/<string:user_id>") # non serve?
 api.add_resource(GetInPrepartita, "/join_prepartita/<string:user_id>")
 api.add_resource(LeavePartita, "/leave_partita/<string:user_id>")
 api.add_resource(StartPartita, "/start_partita/<string:user_id>")
