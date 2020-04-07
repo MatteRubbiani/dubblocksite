@@ -38,14 +38,14 @@ api.add_resource(JollyReveal, "/jolly_reveal/<string:user_id>")
 api.add_resource(JollyEarthquake, "/jolly_earthquake/<string:user_id>")
 # ============================================ #
 
-
-from db import db
-
-
-@app.before_first_request
-def create_table():
-    db.create_all()
+if __name__ == "__main__":
+    from db import db
 
 
-db.init_app(app)
-app.run(port=60000, debug=True)
+    @app.before_first_request
+    def create_table():
+        db.create_all()
+
+
+    db.init_app(app)
+    app.run(port=60000, debug=True)
