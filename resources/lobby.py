@@ -134,6 +134,8 @@ class StartPartita(Resource):
         livelli = int(data["livelli"])
         user = UserModel.find_by_id(user_id)
         lobby = LobbyModel.find_by_id(user.lobby_id)
+        if lobby.status == 1:
+            return "match has already started", 403
         lobby.status = 1
 
         users = UserModel.find_all_by_lobby_id_and_status(lobby.id, 1)
