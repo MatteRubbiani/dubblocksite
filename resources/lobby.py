@@ -62,6 +62,23 @@ class GetLobbyStatus(Resource):
             return 2, 200
         return lobby.status, 200
 
+class GetUsersInPrepartita(Resource):
+    def get(self, user_id):
+        user = UserModel.find_by_id(user_id)
+        lobby = LobbyModel.find_by_id(user.id)
+        if not lobby:
+            return "ah, ah", 402
+        if lobby.status == 1:
+            return "match has started", 401
+        users = UserModel.find_all_by_lobby_id_and_status(lobby.id, 1)
+        j_users = []
+        for u in users:
+            j_users.append({
+                "id": u.id,
+                "pedina_number": u.pedina_number
+            })
+        return j_users
+
 
 # ================== partite =================== #
 
