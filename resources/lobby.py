@@ -77,6 +77,11 @@ class GetUsersInPrepartita(Resource):
                 "id": u.id,
                 "pedina_number": u.pedina_number
             })
+        for i in j_users:
+            if i.id == user_id:
+                j_users.remove(i)
+                j_users.append(i)
+                break
         return j_users
 
 
