@@ -65,7 +65,7 @@ class GetLobbyStatus(Resource):
 class GetUsersInPrepartita(Resource):
     def get(self, user_id):
         user = UserModel.find_by_id(user_id)
-        lobby = LobbyModel.find_by_id(user.id)
+        lobby = LobbyModel.find_by_id(user.lobby_id)
         if not lobby:
             return "ah, ah", 402
         if lobby.status == 1:
