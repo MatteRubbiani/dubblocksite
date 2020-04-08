@@ -10,8 +10,6 @@ class CreateLobby(Resource):
     def post(self):
         lobby = LobbyModel()
         lobby.save_to_db()
-
-        lobby.create_blocks()
         user = UserModel(lobby_id=lobby.id)
         user.save_to_db()
         return [lobby.tag, user.id]
@@ -84,7 +82,6 @@ class GetUsersInPrepartita(Resource):
                 break
         return j_users
 
-
 # ================== partite =================== #
 
 class ResetPartita(Resource):
@@ -130,22 +127,46 @@ class LeavePartita(Resource):
 
 class StartPartita(Resource):
     def post(self, user_id):
+        data = request.get_json()
+        blocchi = int(data["blocchi"])
+        corsie = int(data["corsie"])
+        livelli = int(data["livelli"])
         user = UserModel.find_by_id(user_id)
         lobby = LobbyModel.find_by_id(user.lobby_id)
         lobby.status = 1
+
         users = UserModel.find_all_by_lobby_id_and_status(lobby.id, 1)
         for u in users:
             u.status = 2
             u.jolly_earthquake = 1
             u.jolly_reveal = 1
             u.save_to_db()
+
         n_users = UserModel.find_all_by_lobby_id_and_status(lobby.id, 0)
         for u in n_users:
             u.jolly_earthquake = 0
             u.jolly_reveal = 0
             u.save_to_db()
+
         lobby.update_turn()
+        lobby.blocchi = blocchi
+        lobby.livelli = livelli
+        lobby.corsie = corsie
+        lobby.save_to_db()
+        lobby.create_blocks()
         return "match started", 200
+
+    def get(self, user_id):
+        user = UserModel.find_by_id(user_id)
+        lobby = LobbyModel.find_by_id(user.lobby_id)
+        if not lobby:
+            return "ah ah", 401
+        j_result = {
+            "blocchi": lobby.blocchi,
+            "corsie": lobby.corsie,
+            "livelli": lobby.livelli
+        }
+        return j_result
 
 # ================= gameplay =================== #
 
