@@ -53,6 +53,13 @@ class GetGrid(Resource):
         }
         return j_result
 
+class GetLobbyStatus(Resource):
+    def get(self, lobby_tag):
+        lobby = LobbyModel.find_by_tag(lobby_tag)
+        if not lobby:
+            return 2, 400
+        return lobby.status, 200
+
 # ================== partite =================== #
 
 class ResetPartita(Resource):

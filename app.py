@@ -6,7 +6,7 @@ from flask_cors import CORS
 from flask import render_template
 
 from resources.lobby import CreateLobby, CreateUser, GetGrid, ResetPartita, GetInPrepartita, \
-    LeavePartita, StartPartita, MoveBlocco, Move, JollyEarthquake, JollyReveal
+    LeavePartita, StartPartita, MoveBlocco, Move, JollyEarthquake, JollyReveal, GetLobbyStatus
 # ============ app configs ============= #
 
 app = Flask(__name__)
@@ -39,6 +39,7 @@ api.add_resource(MoveBlocco, "/move_blocco/<string:user_id>/<string:blocco_id>")
 api.add_resource(Move, "/move_pedina/<string:user_id>")
 api.add_resource(JollyReveal, "/jolly_reveal/<string:user_id>")
 api.add_resource(JollyEarthquake, "/jolly_earthquake/<string:user_id>")
+api.add_resource(GetLobbyStatus, "/get_lobby_status/<string:lobby_tag>")
 # ============================================ #
 
 if __name__ == "__main__":
