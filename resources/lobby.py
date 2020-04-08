@@ -119,6 +119,7 @@ class LeavePartita(Resource):
     def post(self, user_id):
         user = UserModel.find_by_id(user_id)
         user.status = 0
+        user.pedina_number = 0
         user.save_to_db()
         lobby = LobbyModel.find_by_id(user.lobby_id)
         lobby.update_turn()
@@ -146,6 +147,7 @@ class StartPartita(Resource):
         for u in n_users:
             u.jolly_earthquake = 0
             u.jolly_reveal = 0
+            u.pedina_number = 0
             u.save_to_db()
 
         lobby.update_turn()
