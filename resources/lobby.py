@@ -102,7 +102,7 @@ class GetInPrepartita(Resource):
         pedina_number = int(data["pedina_number"])
         user = UserModel.find_by_id(user_id)
         lobby = LobbyModel.find_by_id(user.lobby_id)
-        user_ = UserModel.find_by_lobby_id_and_pedina_number()
+        user_ = UserModel.find_by_lobby_id_and_pedina_number(lobby_id=lobby.id, pedina_number=pedina_number)
         if user_:
             return "pedina already taken", 401
         if lobby.status == 0:
