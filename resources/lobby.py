@@ -58,6 +58,8 @@ class GetGrid(Resource):
 class GetLobbyStatus(Resource):
     def get(self, lobby_tag):
         lobby = LobbyModel.find_by_tag(lobby_tag)
+        if not lobby:
+            return 2, 200
         return lobby.status, 200
 
 
