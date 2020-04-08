@@ -1,6 +1,8 @@
 import os
 from flask import Flask
 from flask_restful import Api
+
+from flask_cors import CORS
 from flask import render_template
 
 from resources.lobby import CreateLobby, CreateUser, GetGrid, ResetPartita, GetInPrepartita, \
@@ -13,6 +15,7 @@ app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL", "sqlite:/
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 app.config['CORS_HEADERS'] = '*'
 api = Api(app)
+cors = CORS(app)
 
 # ============ not found ============= #
 
