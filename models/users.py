@@ -48,6 +48,11 @@ class UserModel(db.Model):
         return list1
 
     @classmethod
+    def find_by_lobby_id_and_pedina_number(cls, lobby_id, pedina_number):
+        return UserModel.query.filter_by(lobby_id=lobby_id, pedina_number=pedina_number).first()
+
+
+    @classmethod
     def delete_all(cls):
         for i in UserModel.query:
             i.delete_from_db()

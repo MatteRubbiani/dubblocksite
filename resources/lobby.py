@@ -85,7 +85,7 @@ class GetUsersInPrepartita(Resource):
 class ResetPartita(Resource):
     def post(self, user_id):
         user = UserModel.find_by_id(user_id)
-        lobby = LobbyModel.find_by_id(user.id)
+        lobby = LobbyModel.find_by_id(user.lobby_id)
         users = UserModel.find_all_by_lobby_id(lobby.id)
         for u in users:
             u.status = 0
@@ -98,10 +98,16 @@ class ResetPartita(Resource):
 
 class GetInPrepartita(Resource):
     def post(self, user_id):
+        data = request.get_json()
+        pedina_number = int(data["pedina_number"])
         user = UserModel.find_by_id(user_id)
         lobby = LobbyModel.find_by_id(user.lobby_id)
+        user_ = UserModel.find_by_lobby_id_and_pedina_number()
+        if user_:
+            return "pedina already taken", 401
         if lobby.status == 0:
             user.status = 1
+            user.pedina_number = pedina_number
             user.save_to_db()
             return "user in", 200
         return "match has already started", 400
