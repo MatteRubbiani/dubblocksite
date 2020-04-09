@@ -201,7 +201,7 @@ class Move(Resource):
         corsia = data["corsia"]
         livello = data["livello"]
         user = UserModel.find_by_id(user_id)
-        lobby = LobbyModel.find_by_id(user.loby_id)
+        lobby = LobbyModel.find_by_id(user.lobby_id)
         if lobby.find_player_playing().id == user.id:
             user.corsia = int(corsia)
             user.livello = int(livello)
