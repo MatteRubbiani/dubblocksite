@@ -188,7 +188,7 @@ class MoveBlocco(Resource):
                 blocco.livello = int(livello)
                 blocco.save_to_db()
                 turn = TurnModel.find_by_lobby_id(lobby.id)
-                turn.update
+                turn.update()
                 turn.save_to_db()
                 return "ok", 200
             return "ma cosa", 400
