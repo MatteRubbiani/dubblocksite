@@ -132,6 +132,8 @@ class StartPartita(Resource):
         blocchi = int(data["blocchi"])
         corsie = int(data["corsie"])
         livelli = int(data["livelli"])
+        if blocchi > corsie:
+            return "troppi blocchi", 406
         user = UserModel.find_by_id(user_id)
         lobby = LobbyModel.find_by_id(user.lobby_id)
         if lobby.status == 1:
