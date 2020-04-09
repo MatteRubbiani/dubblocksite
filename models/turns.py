@@ -34,7 +34,7 @@ class TurnModel(db.Model):
 
     def update(self):
         a = self.array.split(",")
-        if self.current == len(a):
+        if self.current >= len(a) - 1:
             random.shuffle(a)
             self.array = "".join(a)
             self.current = 0
