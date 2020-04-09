@@ -119,7 +119,7 @@ class LeavePartita(Resource):
     def post(self, user_id):
         user = UserModel.find_by_id(user_id)
         user.status = 0
-        user.pedina_number = 0
+        user.pedina_number = -1
         user.save_to_db()
         lobby = LobbyModel.find_by_id(user.lobby_id)
         lobby.update_turn()
@@ -207,7 +207,7 @@ class Move(Resource):
             user.livello = int(livello)
             user.save_to_db()
             turn = TurnModel.find_by_lobby_id(lobby.id)
-            turn.update
+            turn.update()
             return "ok", 200
         else:
             return "not you turn", 400
