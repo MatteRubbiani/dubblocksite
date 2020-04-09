@@ -21,7 +21,7 @@ class UserModel(db.Model):
         self.lobby_id = lobby_id
         self.corsia = 0
         self.livello = 0
-        self.pedina_number = 0
+        self.pedina_number = -1
         self.status = 0
         self.jolly_earthquake = 0
         self.jolly_reveal = 0
