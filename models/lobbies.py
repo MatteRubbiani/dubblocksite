@@ -26,7 +26,6 @@ class LobbyModel(db.Model):
         self.livelli = livelli
         self.blocchi = blocchi
         self.modify_tag()
-        self.create_blocks()
         self.status = 0
 
     def modify_tag(self):

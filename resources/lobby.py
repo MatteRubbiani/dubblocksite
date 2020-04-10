@@ -82,6 +82,14 @@ class GetUsersInPrepartita(Resource):
                 break
         return j_users
 
+class DeleteUser(Resource):
+    def delete(self, user_id):
+        user = UserModel.find_by_id(user_id)
+        if not user:
+            return "no such user", 400
+        user.delete_from_db()
+        return "user deleted successfully", 200
+
 # ================== partite =================== #
 
 class ResetPartita(Resource):
