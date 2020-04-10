@@ -36,7 +36,7 @@ class TurnModel(db.Model):
         a = self.array.split(",")
         if self.current >= len(a) - 1:
             random.shuffle(a)
-            self.array = "".join(a)
+            self.array = ",".join(a)
             self.current = 0
         else:
             self.current += 1
