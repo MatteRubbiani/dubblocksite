@@ -37,12 +37,15 @@ class GetGrid(Resource):
         users = UserModel.find_all_by_lobby_id_and_status(lobby.id, game_status + 1)
         for u in users:
             c = None
+            u_id = "rubbo"
             if u.id == user.id:
                 c = u.corsia
+                u_id = u.id
             is_playing = False
             if lobby.status == 1 and lobby.find_player_playing().id == u.id:
                 is_playing = True
-            j_user = {"id": u.id, "livello": u.livello, "pedina_number": u.pedina_number, "corsia": c,
+
+            j_user = {"id": u_id, "livello": u.livello, "pedina_number": u.pedina_number, "corsia": c,
                       "is_playing": is_playing, "jolly_reveal": u.jolly_reveal, "jolly_earthquake": u.jolly_earthquake }
             users_array.append(j_user)
         j_griglia = {"corsie": lobby.corsie, "livelli": lobby.livelli, "status": game_status}
