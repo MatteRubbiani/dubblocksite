@@ -1,6 +1,9 @@
 from db import db
 
 from libs.functions import generate_tag
+from models.lobbies import LobbyModel
+
+import random
 class UserModel(db.Model):
     __tablename__ = "users"
 
@@ -26,6 +29,10 @@ class UserModel(db.Model):
         self.jolly_earthquake = 0
         self.jolly_reveal = 0
 
+    def give_random_corsia(self):
+        lobby = LobbyModel.find_by_id(self.id)
+        self.corsia = random.randint(0, lobby.corsie)
+        self.save_to_db()
 
     @classmethod
     def find_by_id(cls, id):

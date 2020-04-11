@@ -149,8 +149,9 @@ class StartPartita(Resource):
         lobby = LobbyModel.find_by_id(user.lobby_id)
         if lobby.status == 1:
             return "match has already started", 403
+        #RANDOM POSITION
+        user.give_random_corsia()
         lobby.status = 1
-
         users = UserModel.find_all_by_lobby_id_and_status(lobby.id, 1)
         for u in users:
             u.status = 2
