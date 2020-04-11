@@ -30,7 +30,7 @@ class UserModel(db.Model):
         self.jolly_reveal = 0
 
     def give_random_corsia(self, corsie):
-        self.corsia = random.randint(0, int(corsie))
+        self.corsia = random.randint(0, int(corsie)-1)
         self.save_to_db()
 
     @classmethod
