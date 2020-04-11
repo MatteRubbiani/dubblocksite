@@ -185,6 +185,15 @@ class StartPartita(Resource):
         }
         return j_result
 
+class Passa(Resource):
+    def post(self, user_id):
+        user = UserModel.find_by_id(user_id)
+        turn = TurnModel.find_by_lobby_id(int(user.lobby_id))
+        if turn.find_current() != user.id:
+            return "mmmmh", 400
+        turn.update()
+        return "updated", 200
+
 # ================= gameplay =================== #
 
 class MoveBlocco(Resource):

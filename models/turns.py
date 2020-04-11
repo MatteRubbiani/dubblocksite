@@ -31,6 +31,8 @@ class TurnModel(db.Model):
         for i in TurnModel.query:
             i.delete_from_db()
 
+    def find_current(self):
+        return self.array.split(",")[self.current]
 
     def update(self):
         a = self.array.split(",")
