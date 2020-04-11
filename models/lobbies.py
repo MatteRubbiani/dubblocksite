@@ -3,12 +3,13 @@ from libs.functions import generate_tag
 
 import random
 import time
-
-random.seed = time.time()
-
 from .blocchi import BloccoModel
 from .turns import TurnModel
 from .users import UserModel
+
+random.seed = time.time()
+
+
 
 class LobbyModel(db.Model):
     __tablename__ = "lobbies"
