@@ -37,10 +37,10 @@ class GetGrid(Resource):
         users = UserModel.find_all_by_lobby_id_and_status(lobby.id, game_status + 1)
         for u in users:
             c = None
-            u_id = "rubbo"
+            u_id = u.id
             if u.id == user.id:
                 c = u.corsia
-                u_id = u.id
+                # u_id = u.id
             is_playing = False
             if lobby.status == 1 and lobby.find_player_playing().id == u.id:
                 is_playing = True
