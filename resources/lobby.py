@@ -12,6 +12,7 @@ class CreateLobby(Resource):
         lobby.save_to_db()
         user = UserModel(lobby_id=lobby.id)
         user.save_to_db()
+        LobbyModel.erase_unused()
         return [lobby.tag, user.id]
 
 class CreateUser(Resource):
@@ -35,6 +36,7 @@ class GetGrid(Resource):
         game_status = lobby.status
         users_array = []
         users = UserModel.find_all_by_lobby_id_and_status(lobby.id, game_status + 1)
+        user.sort(key=lambda x: x.id)
         for u in users:
             c = None
             u_id = u.id
@@ -109,7 +111,6 @@ class ResetPartita(Resource):
 
         return "ok", 200
 
-
 class GetInPrepartita(Resource):
     def post(self, user_id):
         data = request.get_json()
@@ -126,7 +127,6 @@ class GetInPrepartita(Resource):
             return "user in", 200
         return "match has already started", 400
 
-
 class LeavePartita(Resource):
     def post(self, user_id):
         user = UserModel.find_by_id(user_id)
@@ -136,7 +136,6 @@ class LeavePartita(Resource):
         lobby = LobbyModel.find_by_id(user.lobby_id)
         lobby.update_turn()
         return "user out", 200
-
 
 class StartPartita(Resource):
     def post(self, user_id):
@@ -236,7 +235,7 @@ class Move(Resource):
         else:
             return "not you turn", 400
 
-# JOLLLLLLLYYYY
+# ================== jolly ==================== #
 
 class JollyReveal(Resource):
     def get(self, user_id):

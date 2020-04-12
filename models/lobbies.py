@@ -6,9 +6,9 @@ import time
 from .blocchi import BloccoModel
 from .turns import TurnModel
 from .users import UserModel
+from libs.constants import UNUSED_TIME_LIMIT
 
 random.seed = time.time()
-
 
 
 class LobbyModel(db.Model):
@@ -20,6 +20,7 @@ class LobbyModel(db.Model):
     livelli = db.Column(db.Integer)
     blocchi = db.Column(db.Integer)
     status = db.Column(db.Integer)  # 0 se non in partita, 1 se in partita
+    last_modified = db.Column(db.Integer)
 
     def __init__(self, corsie=5, livelli=10, blocchi=3):
         self.id = None
@@ -28,6 +29,7 @@ class LobbyModel(db.Model):
         self.blocchi = blocchi
         self.modify_tag()
         self.status = 0
+        self.last_modifiied = 0
 
     def modify_tag(self):
         tag = generate_tag()
@@ -47,6 +49,23 @@ class LobbyModel(db.Model):
     def delete_all(cls):
         for i in LobbyModel.query:
             i.delete_from_db()
+
+    @classmethod
+    def erase_unused(cls):
+        a = LobbyModel.query.filter_by()
+        now = time.time()
+        for i in a:
+            expiration_date = i.last_modified + UNUSED_TIME_LIMIT
+            if expiration_date < now:
+                i.clean()
+
+    def clean(self):
+        BloccoModel.delete_all_by_lobby_id(self.id)
+        if TurnModel.find_by_lobby_id(self.id):
+            TurnModel.find_by_lobby_id(self.id).delete_from_db()
+        for u in UserModel.find_all_by_lobby_id(self.id):
+            u.delete_from_db()
+
 
     def create_blocks(self):
         BloccoModel.delete_all_by_lobby_id(self.id)
@@ -70,6 +89,8 @@ class LobbyModel(db.Model):
         s_players = ",".join(str(player.id) for player in players)
         turn = TurnModel(self.id, array=s_players)
         turn.save_to_db()
+        self.last_modified = time.time()
+        self.save_to_db()
 
     def find_player_playing(self):
         turn = TurnModel.find_by_lobby_id(self.id)
@@ -83,5 +104,6 @@ class LobbyModel(db.Model):
         db.session.commit()
 
     def save_to_db(self):
+        self.last_modified = time.time()
         db.session.add(self)
         db.session.commit()
