@@ -36,7 +36,7 @@ class GetGrid(Resource):
         game_status = lobby.status
         users_array = []
         users = UserModel.find_all_by_lobby_id_and_status(lobby.id, game_status + 1)
-        user.sort(key=lambda x: x.id)
+        users.sort(key=lambda x: x.id)
         for u in users:
             c = None
             u_id = u.id
