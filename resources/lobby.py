@@ -49,7 +49,8 @@ class GetGrid(Resource):
             if lobby.status == 1 and lobby.find_player_playing().id == u.id:
                 is_playing = True
             if u.livello >= lobby.livelli:
-                winners_array.append(u.pedina_number)
+                winners_array.append({"id": u.id,
+                                      "pedina_number": u.pedina_number})
             else:
                 j_user = {"id": u_id, "livello": u.livello, "pedina_number": u.pedina_number, "corsia": c,
                           "is_playing": is_playing, "jolly_reveal": u.jolly_reveal,
