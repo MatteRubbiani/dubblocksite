@@ -15,6 +15,7 @@ class CreateLobby(Resource):
         LobbyModel.erase_unused()
         return [lobby.tag, user.id]
 
+
 class CreateUser(Resource):
     def post(self, lobby_tag):
         lobby = LobbyModel.find_by_tag(lobby_tag)
@@ -23,6 +24,7 @@ class CreateUser(Resource):
         user = UserModel(lobby_id=lobby.id)
         user.save_to_db()
         return user.id
+
 
 class GetGrid(Resource):
     def get(self, user_id):
@@ -35,6 +37,7 @@ class GetGrid(Resource):
             blocchi_array.append(j_bloc)
         game_status = lobby.status
         users_array = []
+        winners_array = []
         users = UserModel.find_all_by_lobby_id_and_status(lobby.id, game_status + 1)
         users.sort(key=lambda x: x.id)
         for u in users:
@@ -42,22 +45,25 @@ class GetGrid(Resource):
             u_id = u.id
             if u.id == user.id:
                 c = u.corsia
-                # u_id = u.id
             is_playing = False
             if lobby.status == 1 and lobby.find_player_playing().id == u.id:
                 is_playing = True
             if u.livello >= lobby.livelli:
-                continue
-            j_user = {"id": u_id, "livello": u.livello, "pedina_number": u.pedina_number, "corsia": c,
-                      "is_playing": is_playing, "jolly_reveal": u.jolly_reveal, "jolly_earthquake": u.jolly_earthquake }
-            users_array.append(j_user)
+                winners_array.append(u.pedina_number)
+            else:
+                j_user = {"id": u_id, "livello": u.livello, "pedina_number": u.pedina_number, "corsia": c,
+                          "is_playing": is_playing, "jolly_reveal": u.jolly_reveal,
+                          "jolly_earthquake": u.jolly_earthquake}
+                users_array.append(j_user)
         j_griglia = {"corsie": lobby.corsie, "livelli": lobby.livelli, "status": game_status}
         j_result = {
             "griglia": j_griglia,
             "blocchi": blocchi_array,
-            "users": users_array
+            "users": users_array,
+            "winners": winners_array
         }
         return j_result
+
 
 class GetLobbyStatus(Resource):
     def get(self, lobby_tag):
@@ -65,6 +71,7 @@ class GetLobbyStatus(Resource):
         if not lobby:
             return 2, 200
         return lobby.status, 200
+
 
 class GetUsersInPrepartita(Resource):
     def get(self, user_id):
@@ -88,6 +95,7 @@ class GetUsersInPrepartita(Resource):
                 break
         return j_users
 
+
 class DeleteUser(Resource):
     def delete(self, user_id):
         user = UserModel.find_by_id(user_id)
@@ -95,6 +103,7 @@ class DeleteUser(Resource):
             return "no such user", 400
         user.delete_from_db()
         return "user deleted successfully", 200
+
 
 # ================== partite =================== #
 
@@ -110,6 +119,7 @@ class ResetPartita(Resource):
         lobby.save_to_db()
 
         return "ok", 200
+
 
 class GetInPrepartita(Resource):
     def post(self, user_id):
@@ -127,6 +137,7 @@ class GetInPrepartita(Resource):
             return "user in", 200
         return "match has already started", 400
 
+
 class LeavePartita(Resource):
     def post(self, user_id):
         user = UserModel.find_by_id(user_id)
@@ -136,6 +147,7 @@ class LeavePartita(Resource):
         lobby = LobbyModel.find_by_id(user.lobby_id)
         lobby.update_turn()
         return "user out", 200
+
 
 class StartPartita(Resource):
     def post(self, user_id):
@@ -149,7 +161,7 @@ class StartPartita(Resource):
         lobby = LobbyModel.find_by_id(user.lobby_id)
         if lobby.status == 1:
             return "match has already started", 403
-        #RANDOM POSITION
+        # RANDOM POSITION
         user.give_random_corsia(lobby.corsie)
         lobby.status = 1
         users = UserModel.find_all_by_lobby_id_and_status(lobby.id, 1)
@@ -186,6 +198,7 @@ class StartPartita(Resource):
         }
         return j_result
 
+
 class Passa(Resource):
     def post(self, user_id):
         user = UserModel.find_by_id(user_id)
@@ -194,6 +207,7 @@ class Passa(Resource):
             return "mmmmh", 400
         turn.update()
         return "updated", 200
+
 
 # ================= gameplay =================== #
 
@@ -218,6 +232,7 @@ class MoveBlocco(Resource):
         else:
             return "not you turn", 400
 
+
 class Move(Resource):
     def post(self, user_id):
         data = request.get_json()
@@ -234,6 +249,7 @@ class Move(Resource):
             return "ok", 200
         else:
             return "not you turn", 400
+
 
 # ================== jolly ==================== #
 
@@ -268,6 +284,7 @@ class JollyReveal(Resource):
             "users": users_array
         }
         return j_result
+
 
 class JollyEarthquake(Resource):
     def get(self, user_id):
